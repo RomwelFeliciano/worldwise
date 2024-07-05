@@ -1,5 +1,5 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import styles from "./Map.module.css";
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import styles from './Map.module.css';
 import {
   MapContainer,
   Marker,
@@ -7,26 +7,35 @@ import {
   TileLayer,
   useMap,
   useMapEvents,
-} from "react-leaflet";
-import { useEffect, useState } from "react";
-import { useCities } from "../contexts/CitiesContext";
-import { useGeolocation } from "../hooks/useGeolocation";
-import Button from "./Button";
+} from 'react-leaflet';
+import { useEffect, useState } from 'react';
+import { useCities } from '../contexts/CitiesContext';
+import { useGeolocation } from '../hooks/useGeolocation';
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import Button from './Button';
+import { useUrlPosition } from '../hooks/useUrlPosition';
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 function Map() {
   const { cities } = useCities();
   const [mapPosition, setMapPosition] = useState([
     52.53586782505711, 13.376933665713324,
   ]);
-  const [searchParams] = useSearchParams();
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
     getPosition,
   } = useGeolocation();
 
-  const mapLat = searchParams.get("lat");
-  const mapLng = searchParams.get("lng");
+  const [mapLat, mapLng] = useUrlPosition();
 
   useEffect(
     function () {
@@ -46,8 +55,8 @@ function Map() {
   return (
     <div className={styles.mapContainer}>
       {!geolocationPosition && (
-        <Button type="position" onClick={getPosition}>
-          {isLoadingPosition ? "Loading..." : "Use Your Position"}
+        <Button type='position' onClick={getPosition}>
+          {isLoadingPosition ? 'Loading...' : 'Use Your Position'}
         </Button>
       )}
       <MapContainer
@@ -59,7 +68,7 @@ function Map() {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+          url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
         />
         {cities.map((city, index) => (
           <Marker position={[city.position.lat, city.position.lng]} key={index}>
