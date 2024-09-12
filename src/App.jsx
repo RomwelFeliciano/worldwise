@@ -1,24 +1,37 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import Product from './pages/Product';
-import Pricing from './pages/Pricing';
-import Homepage from './pages/Homepage';
-import Login from './pages/Login';
-import AppLayout from './pages/AppLayout';
-import PageNotFound from './pages/PageNotFound';
+import { CitiesProvider } from './contexts/CitiesContext';
+import { AuthProvider } from './contexts/FakeAuthContext';
+import ProtectedRoute from './pages/ProtectedRoute';
+
 import Form from './components/Form';
 import City from './components/City';
 import CityList from './components/CityList';
 import CountryList from './components/CountryList';
-import { CitiesProvider } from './contexts/CitiesContext';
-import { AuthProvider } from './contexts/FakeAuthContext';
-import ProtectedRoute from './pages/ProtectedRoute';
+import SpinnerFullPage from './components/SpinnerFullPage';
+
+// import Product from './pages/Product';
+// import Pricing from './pages/Pricing';
+// import Homepage from './pages/Homepage';
+// import Login from './pages/Login';
+// import AppLayout from './pages/AppLayout';
+// import PageNotFound from './pages/PageNotFound';
+
+const Homepage = lazy(() => import("./pages/Homepage"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Product = lazy(() => import("./pages/Product"));
+const Login = lazy(() => import("./pages/Login"));
+const AppLayout = lazy(() => import("./pages/AppLayout"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+
 
 function App() {
   return (
     <AuthProvider>
       <CitiesProvider>
         <BrowserRouter>
+        <Suspense fallback={<SpinnerFullPage/>}>
           <Routes>
             <Route index element={<Homepage />} />
             <Route path='product' element={<Product />} />
@@ -40,6 +53,7 @@ function App() {
             </Route>
             <Route path='*' element={<PageNotFound />} />
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </CitiesProvider>
     </AuthProvider>
