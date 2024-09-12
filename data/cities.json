@@ -47,6 +47,18 @@
         "lat": "52.550262366739794",
         "lng": "13.29723358154297"
       }
+    },
+    {
+      "id": "f92a",
+      "cityName": "Mabalacat City",
+      "country": "Philippines (the)",
+      "emoji": "🇵🇭",
+      "date": "2024-07-05T05:51:04.904Z",
+      "notes": "Lugar Notes",
+      "position": {
+        "lat": "15.208579786225192",
+        "lng": "120.53212165832521"
+      }
     }
   ]
 }
